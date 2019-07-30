@@ -9,12 +9,12 @@ import java.net.URL;
 
 public class Down {
 
-    public int GB=0,MB=0,KB=0,B=0,count=0;
+    public static int GB=0,MB=0,KB=0,B=0,count=0;
     public boolean isDown=true,isDowning=false;
-    long lastBy=0,nowBy=0,allBy=1;
-    double cent=0;
+    static long lastBy=0,nowBy=0,allBy=1;
+    static double cent=0;
     HttpURLConnection connection=null;
-    public String getDownInfo() {
+    public static String getDownInfo() {
         String r=String.format("第%d次下载\t\t%.2f%%\t%dkb/s",
                 count,cent,(nowBy-lastBy)/1024);
 //        r+="%\n"+lastBy+"/"+nowBy;
