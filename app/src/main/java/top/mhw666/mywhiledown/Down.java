@@ -15,7 +15,7 @@ public class Down {
     static double cent=0;
     HttpURLConnection connection=null;
     public static String getDownInfo() {
-        String r=String.format("第%d次下载\t\t%.2f%%\t%dkb/s",
+        String r=String.format("第%d次下载\t%.2f%%\t%dkb/s",
                 count,cent,(nowBy-lastBy)/1024);
 //        r+="%\n"+lastBy+"/"+nowBy;
         r+="\n下载流量=\t\t"+GB+"GB "+MB+"MB "+KB+"KB";
@@ -86,4 +86,6 @@ public class Down {
 //            }
         }isDowning=false;
     }//void end
+
+
 }

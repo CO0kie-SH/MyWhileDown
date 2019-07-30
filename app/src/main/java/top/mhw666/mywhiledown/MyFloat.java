@@ -39,8 +39,8 @@ public class MyFloat extends Service {
         layoutParams.format = PixelFormat.RGBA_8888;
         layoutParams.gravity = Gravity.LEFT | Gravity.TOP;
         layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-        layoutParams.width = 570;
-        layoutParams.height = 160;
+        layoutParams.width = 600;
+        layoutParams.height = 190;
         layoutParams.x = 300;
         layoutParams.y = 300;
     }

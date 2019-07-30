@@ -11,6 +11,7 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Build;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -19,6 +20,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import android.provider.Settings;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements ServiceConnection {
     long runSd=0;
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
     CheckBox cbF;
     Down down=new Down();
     Intent intent;
+    boolean isrun=true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
                 System.out.println(">>"+Build.VERSION.SDK_INT+">>"+isChecked);
                 if (Build.VERSION.SDK_INT >= 23) {
                     if(!Settings.canDrawOverlays(getApplicationContext())) {
+                        Toast.makeText(MainActivity.this,
+                                "请先给权限后再试",Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                                 Uri.parse("package:" + getPackageName()));
                         //方法2 跳转手选方式
@@ -61,6 +66,16 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
                         cbF.setChecked(false);
                         return;
                     }
+                }else{
+                    Toast.makeText(MainActivity.this,
+                        "您的系统暂时不支持自动跳转，请手动给悬浮窗权限",
+                            Toast.LENGTH_LONG).show();
+//                    Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+                    //方法2 跳转手选方式
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    startActivityForResult(intent, 1);
+//                    cbF.setChecked(false);
+//                    return;
                 }
                 if(isChecked){
                     if (MyFloat.isStarted)return;
@@ -68,10 +83,12 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
                         intent=new Intent(MainActivity.this, MyFloat.class);
                         startService(intent);
                         bindService(intent, MainActivity.this, Context.BIND_AUTO_CREATE);
+                        cbF.setEnabled(false);
                     }
                 }
             }
         });
+        if (isrun)
         handler.postDelayed(runing,1);
     }
 
@@ -117,9 +134,26 @@ public class MainActivity extends AppCompatActivity implements ServiceConnection
 
     @Override
     protected void onDestroy() {
+        down.isDowning=false;
+        if(!down.isDown){
+            isrun=false;
+            unbindService(this);
+            stopService(intent);
+            myBinder=null;
+            intent=null;
+            handler.removeCallbacks(runing);
+            System.exit(1);
+        }
         super.onDestroy();
-        handler.removeCallbacks(runing);
     }
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && down.isDown) {
+            moveTaskToBack(false);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     //一旦绑定成功就会执行该函数
     @Override
     public void onServiceConnected(ComponentName name, IBinder iBinder) {
