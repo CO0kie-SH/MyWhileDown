@@ -8,3 +8,7 @@ https://github.com/dongzhong/TestForFloatingWindow
 
 Android Demo ： 悬浮窗（支持Android7.0） - 简书<br>
 https://www.jianshu.com/p/ac63c57d2555
+
+<h5>第三种绑定方法</h5>
+Android学习之Activity与Service进行通信的三种方式 - run 的博客 - CSDN博客<br>
+https://blog.csdn.net/qq_28468727/article/details/52144155
